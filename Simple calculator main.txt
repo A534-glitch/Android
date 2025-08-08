@@ -1,0 +1,65 @@
+package com.example.cal;
+
+import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.*;
+
+public class MainActivity extends AppCompatActivity {
+
+    EditText etNum1, etNum2;
+    Button btnAdd, btnSubtract, btnMultiply, btnDivide;
+    TextView tvResult;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        etNum1 = findViewById(R.id.etNum1);
+        etNum2 = findViewById(R.id.etNum2);
+        btnAdd = findViewById(R.id.btnAdd);
+        btnSubtract = findViewById(R.id.btnSubtract);
+        btnMultiply = findViewById(R.id.btnMultiply);
+        btnDivide = findViewById(R.id.btnDivide);
+        tvResult = findViewById(R.id.tvResult);
+
+        btnAdd.setOnClickListener(v -> calculate('+'));
+        btnSubtract.setOnClickListener(v -> calculate('-'));
+        btnMultiply.setOnClickListener(v -> calculate('*'));
+        btnDivide.setOnClickListener(v -> calculate('/'));
+    }
+
+    private void calculate(char operator) {
+        String input1 = etNum1.getText().toString().trim();
+        String input2 = etNum2.getText().toString().trim();
+
+        if (input1.isEmpty() || input2.isEmpty()) {
+            tvResult.setText("Please enter both numbers.");
+            return;
+        }
+
+        try {
+            double num1 = Double.parseDouble(input1);
+            double num2 = Double.parseDouble(input2);
+            double result = 0;
+
+            switch (operator) {
+                case '+': result = num1 + num2; break;
+                case '-': result = num1 - num2; break;
+                case '*': result = num1 * num2; break;
+                case '/':
+                    if (num2 == 0) {
+                        tvResult.setText("Cannot divide by zero!");
+                        return;
+                    }
+                    result = num1 / num2;
+                    break;
+            }
+
+            tvResult.setText("Result: " + result);
+        } catch (NumberFormatException e) {
+            tvResult.setText("Invalid input.");
+        }
+    }
+}
